@@ -5,7 +5,7 @@ function pdo_connect_mysql()
     $DATABASE_HOST = 'localhost';
     $DATABASE_USER = 'root';
     $DATABASE_PASS = '';
-    $DATABASE_NAME = 'vallalat';
+    $DATABASE_NAME = 'vallalatok';
     try {
         return new PDO('mysql:host=' . $DATABASE_HOST . ';dbname=' . $DATABASE_NAME . ';charset=utf8', $DATABASE_USER, $DATABASE_PASS);
     } catch (PDOException $exception) {
@@ -38,6 +38,7 @@ EOT;
 function template_footer()
 {
     echo <<<EOT
+		<script src="js/vallalat.js"></script>
     </body>
 </html>
 EOT;

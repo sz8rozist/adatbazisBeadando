@@ -69,22 +69,6 @@ body {
 .read .create-contact:hover {
     background-color: #32a367;
 }
-.read .pagination {
-    display: flex;
-    justify-content: flex-end;
-}
-.read .pagination a {
-    display: inline-block;
-    text-decoration: none;
-    background-color: #a5a7a9;
-    font-weight: bold;
-    color: #FFFFFF;
-    padding: 5px 10px;
-    margin: 15px 0 15px 5px;
-}
-.read .pagination a:hover {
-    background-color: #999b9d;
-}
 .read table {
     width: 100%;
     padding-top: 30px;
@@ -104,7 +88,7 @@ body {
     border-bottom: 1px solid #d3dae0;
 }
 .read table tbody tr:nth-child(even) {
-    background-color: #fbfcfc;
+   / background-color: #fbfcfc;
 }
 .read table tbody tr:hover {
     background-color: #376ab7;
@@ -119,7 +103,7 @@ body {
     padding: 10px;
 }
 .read table tbody tr td:nth-child(1) {
-    color: #a5a7a9;
+   /* color: #a5a7a9;*/
 }
 .read table tbody tr td.actions {
     padding: 8px;
@@ -190,4 +174,11 @@ body {
 }
 .delete .yesno a:hover {
     background-color: #32a367;
+}
+
+.error{
+    background: firebrick;
+    padding: 10px;
+    color: white;
+    text-align: center;
 }
