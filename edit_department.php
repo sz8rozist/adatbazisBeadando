@@ -13,12 +13,6 @@ if(isset($_GET['id'])){
     $osztaly = $osztaly_stmt->fetch(PDO::FETCH_ASSOC);
 
     if(!empty($_POST)){
-        $check_stmt = $pdo->prepare('SELECT * FROM osztaly WHERE nev=?');
-        $check_stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
-        $check_stmt->execute();
-        $row = $check_stmt->fetch(PDO::FETCH_ASSOC);
-        if(!$row)
-        {
             if($_POST["manager_id"] != 0){
                 $stmt = $pdo->prepare('UPDATE `osztaly` SET `nev` = ?, `manager_azonosito` = ? WHERE `osztaly`.`id` = ?');
                 $stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
@@ -32,9 +26,6 @@ if(isset($_GET['id'])){
             }else{
                 $msg = 'Válassz managert!!';
             }
-        }else{
-            $msg = 'Az osztálynév foglalt!';
-        }
     }
 }
 ?>
