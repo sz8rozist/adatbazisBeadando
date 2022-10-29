@@ -1,52 +1,39 @@
 <?php
 include ('functions.php');
 $pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('SELECT * FROM vallalat');
+$stmt = $pdo->prepare('SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id');
 $stmt->execute();
-$vallalat = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+$osztalyok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <?=template_header('Kezdőlap')?>
-
     <div class="content read">
-        <h2>Vállalatok</h2>
-        <a href="create_vallalat.php" class="create-contact">Új vállalat</a>
+        <h2>Osztályok</h2>
+        <a href="new_department.php" class="create-contact">Új osztály</a>
         <table>
             <thead>
             <tr>
-                <td>Cégjegyzékszám</td>
                 <td>Név</td>
-                <td>Alapítás</td>
-                <td>Ország</td>
-                <td>Irányítószám</td>
-                <td>Város</td>
-                <td>Utca</td>
-                <td>Házszám</td>
+                <td>Manager</td>
+                <td>Dolgozók száma</td>
                 <td></td>
             </tr>
             </thead>
             <tbody>
-            <?php if(!empty($vallalat)): ?>
-            <?php foreach ($vallalat as $vallalat): ?>
-                <tr data-id="<?=$vallalat["cegjegyzekszam"]?>" onclick="vallalat_detail(this)">
-                    <td><?=$vallalat['cegjegyzekszam']?></td>
-                    <td><?=$vallalat['nev']?></td>
-                    <td><?=$vallalat['alapitasi_datum']?></td>
-                    <td><?=$vallalat['orszag']?></td>
-                    <td><?=$vallalat['iranyitoszam']?></td>
-                    <td><?=$vallalat['varos']?></td>
-                    <td><?=$vallalat['utca']?></td>
-                    <td><?=$vallalat['hazszam']?></td>
+            <?php if(!empty($osztalyok)): ?>
+            <?php foreach ($osztalyok as $osztaly): ?>
+                <tr>
+                    <td><?=$osztaly['nev']?></td>
+                    <td><?=$osztaly['veznev']. " ". $osztaly['kernev']?></td>
+                    <td><?=$osztaly['dolgozo_count']?></td>
                     <td class="actions">
-                        <a href="edit_vallalat.php?cegjegyzekszam=<?=$vallalat['cegjegyzekszam']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>
-                        <a href="delete_vallalat.php?cegjegyzekszam=<?=$vallalat['cegjegyzekszam']?>" class="trash"><i class="fas fa-trash fa-xs"></i></a>
+                        <a href="edit_department.php?id=<?=$osztaly['id']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>
+                        <a href="delete.php?osztaly_id=<?=$osztaly['id']?>" class="trash"><i class="fas fa-trash fa-xs"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
 <?php else: ?>
             <tr>
-                <td colspan="9">Nincs rögzítve vállalat.</td>
+                <td colspan="9">Nincs rögzítve osztály.</td>
             </tr>
 <?php endif; ?>
             </tbody>
@@ -54,3 +41,5 @@ $vallalat = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 <?=template_footer()?>
+
+

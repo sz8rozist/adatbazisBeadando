@@ -139,7 +139,7 @@ body {
     padding: 10px 0;
     margin-right: 25px;
 }
-.update form input {
+.update form input, .update form select {
     padding: 10px;
     width: 400px;
     margin-right: 25px;

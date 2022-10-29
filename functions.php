@@ -5,9 +5,11 @@ function pdo_connect_mysql()
     $DATABASE_HOST = 'localhost';
     $DATABASE_USER = 'root';
     $DATABASE_PASS = '';
-    $DATABASE_NAME = 'vallalatok';
+    $DATABASE_NAME = 'vallalat';
     try {
-        return new PDO('mysql:host=' . $DATABASE_HOST . ';dbname=' . $DATABASE_NAME . ';charset=utf8', $DATABASE_USER, $DATABASE_PASS);
+        $pdo = new PDO('mysql:host=' . $DATABASE_HOST . ';dbname=' . $DATABASE_NAME . ';charset=utf8', $DATABASE_USER, $DATABASE_PASS);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
     } catch (PDOException $exception) {
         exit('Sikertelen adatbázis csatlakozás!');
     }
@@ -38,7 +40,6 @@ EOT;
 function template_footer()
 {
     echo <<<EOT
-		<script src="js/vallalat.js"></script>
     </body>
 </html>
 EOT;
