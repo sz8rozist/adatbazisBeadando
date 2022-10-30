@@ -29,8 +29,9 @@ function template_header($title)
     <nav class="navtop">
     	<div>
     		<h1>Vállalat irányítási rendszer</h1>
-            <a href="index.php"><i class="fas fa-home"></i>Kezdőlap</a>
-    		<a href="employe.php"><i class="fas fa-users"></i>Dolgozók</a>
+            <a href="index.php"><i class="fas fa-building"></i>Osztály</a>
+    		<a href="employe.php"><i class="fas fa-users"></i>Dolgozó</a>
+    		<a href="projekt.php"><i class="fas fa-project-diagram"></i>Projekt</a>
     	</div>
     </nav>
 EOT;

@@ -128,38 +128,6 @@ body {
 .read table tbody tr td.actions .edit:hover {
     background-color: #319ca3;
 }
-/*.update form {
-    padding: 15px 0;
-    display: flex;
-    flex-flow: wrap;
-}
-.update form label {
-    display: inline-flex;
-    width: 400px;
-    padding: 10px 0;
-    margin-right: 25px;
-}
-.update form input, .update form select {
-    padding: 10px;
-    width: 400px;
-    margin-right: 25px;
-    margin-bottom: 15px;
-    border: 1px solid #cccccc;
-}
-.update form input[type="submit"] {
-    display: block;
-    background-color: #38b673;
-    border: 0;
-    font-weight: bold;
-    font-size: 14px;
-    color: #FFFFFF;
-    cursor: pointer;
-    width: 200px;
-    margin-top: 15px;
-}
-.update form input[type="submit"]:hover {
-    background-color: #32a367;
-}*/
 .update form input[type="submit"] {
     display: block;
     background-color: #38b673;
