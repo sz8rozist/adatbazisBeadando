@@ -10,7 +10,7 @@ body {
     margin: 0;
 }
 .navtop {
-    background-color: #3f69a8;
+    background-color: #06283D;
     height: 60px;
     width: 100%;
     border: 0;
@@ -59,15 +59,12 @@ body {
 .read .create-contact {
     display: inline-block;
     text-decoration: none;
-    background-color: #38b673;
+    background-color: #256D85;
     font-weight: bold;
     font-size: 14px;
     color: #FFFFFF;
     padding: 10px 15px;
     margin: 15px 0;
-}
-.read .create-contact:hover {
-    background-color: #32a367;
 }
 .read table {
     width: 100%;
@@ -75,13 +72,13 @@ body {
     border-collapse: collapse;
 }
 .read table thead {
-    background-color: #ebeef1;
+    background-color: #06283D;
     border-bottom: 1px solid #d3dae0;
 }
 .read table thead td {
     padding: 10px;
     font-weight: bold;
-    color: #767779;
+    color: #DFF6FF;
     font-size: 14px;
 }
 .read table tbody tr {
@@ -91,7 +88,7 @@ body {
    / background-color: #fbfcfc;
 }
 .read table tbody tr:hover {
-    background-color: #376ab7;
+    background-color: #256D85;
 }
 .read table tbody tr:hover td {
     color: #FFFFFF;
@@ -101,9 +98,6 @@ body {
 }
 .read table tbody tr td {
     padding: 10px;
-}
-.read table tbody tr td:nth-child(1) {
-   /* color: #a5a7a9;*/
 }
 .read table tbody tr td.actions {
     padding: 8px;
@@ -130,7 +124,7 @@ body {
 }
 .update form input[type="submit"] {
     display: block;
-    background-color: #38b673;
+    background-color: #256D85;
     border: 0;
     font-weight: bold;
     font-size: 14px;
@@ -138,9 +132,6 @@ body {
     cursor: pointer;
     width: 200px;
     margin-top: 15px;
-}
-.update form input[type="submit"]:hover {
-    background-color: #32a367;
 }
 .update form input, .update form select {
     padding: 10px;
@@ -179,7 +170,7 @@ body {
 }
 
 .pagination a.active {
-    background-color: #4CAF50;
+    background-color: #256D85;
     color: white;
 }
 
