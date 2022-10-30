@@ -1,5 +1,4 @@
 <?php
-
 function pdo_connect_mysql()
 {
     $DATABASE_HOST = 'localhost';
@@ -40,6 +39,8 @@ EOT;
 function template_footer()
 {
     echo <<<EOT
+    <script	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="js/chart.js"></script>
     </body>
 </html>
 EOT;

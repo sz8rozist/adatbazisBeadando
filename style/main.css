@@ -128,7 +128,7 @@ body {
 .read table tbody tr td.actions .edit:hover {
     background-color: #319ca3;
 }
-.update form {
+/*.update form {
     padding: 15px 0;
     display: flex;
     flex-flow: wrap;
@@ -159,26 +159,60 @@ body {
 }
 .update form input[type="submit"]:hover {
     background-color: #32a367;
-}
-.delete .yesno {
-    display: flex;
-}
-.delete .yesno a {
-    display: inline-block;
-    text-decoration: none;
+}*/
+.update form input[type="submit"] {
+    display: block;
     background-color: #38b673;
+    border: 0;
     font-weight: bold;
+    font-size: 14px;
     color: #FFFFFF;
-    padding: 10px 15px;
-    margin: 15px 10px 15px 0;
+    cursor: pointer;
+    width: 200px;
+    margin-top: 15px;
 }
-.delete .yesno a:hover {
+.update form input[type="submit"]:hover {
     background-color: #32a367;
 }
+.update form input, .update form select {
+    padding: 10px;
+    width: 400px;
+    margin-right: 25px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+}
 
+.update form{
+    display: grid;
+    padding-top: 25px;
+}
+.update form label{
+    padding: 8px 0;
+}
 .error{
     background: firebrick;
     padding: 10px;
     color: white;
     text-align: center;
 }
+.chart-container{
+    padding-top: 50px;
+}
+.pagination{
+    margin: 0 auto;
+    width: fit-content;
+    padding: 10px 15px;
+}
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}

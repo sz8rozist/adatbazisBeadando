@@ -39,10 +39,10 @@ if(!empty($_POST)){
         <h2>Osztály hozzáadása</h2>
         <form action="new_department.php" method="post">
             <label for="nev">Név</label>
+            <input type="text" name="osztaly_nev" placeholder="Osztály neve" id="osztaly_nev">
             <?php if(!empty($dolgozok)): ?>
             <label for="manager">Manager</label>
             <?php endif; ?>
-            <input type="text" name="osztaly_nev" placeholder="Osztály neve" id="osztaly_nev">
             <?php if(!empty($dolgozok)): ?>
             <select name="manager_id">
                 <option value="0">Válasszon managert!</option>

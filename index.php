@@ -1,9 +1,17 @@
 <?php
 include ('functions.php');
 $pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id');
-$stmt->execute();
-$osztalyok = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$perPage = 15;
+
+$total_row = $pdo->query('SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id')->rowCount();
+$pages = ceil($total_row / $perPage);
+
+$page = isset($_GET['page']) ? $_GET["page"] : 1;
+$start = ($page - 1) * $perPage;
+
+$query = "SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id LIMIT $start,$perPage";
+$osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <?=template_header('Kezdőlap')?>
     <div class="content read">
@@ -38,6 +46,16 @@ $osztalyok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php endif; ?>
             </tbody>
         </table>
+        <div class="pagination">
+        <?php for ($i = 1; $i <= $pages ; $i++):?>
+            <a <?php echo ($i == $page) ? "class='active'" : "" ?> href='<?php echo "?page=$i"; ?>'>
+                <?php  echo $i; ?>
+            </a>
+        <?php endfor; ?>
+        </div>
+        <div class="chart-container">
+            <canvas id="pie_chart"></canvas>
+        </div>
     </div>
 
 <?=template_footer()?>
