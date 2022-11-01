@@ -7,25 +7,25 @@ if(isset($_GET['id'])){
     $stmt->execute();
     $dolgozok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $osztaly_stmt = $pdo->prepare("SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, dolgozo.id as dolgozoid FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id WHERE osztaly.id = ?");
+    $osztaly_stmt = $pdo->prepare("SELECT osztaly.id, osztaly.nev FROM osztaly WHERE osztaly.id = ?");
     $osztaly_stmt->bindParam(1, $_GET['id'], PDO::PARAM_INT);
     $osztaly_stmt->execute();
     $osztaly = $osztaly_stmt->fetch(PDO::FETCH_ASSOC);
 
     if(!empty($_POST)){
-            if($_POST["manager_id"] != 0){
-                $stmt = $pdo->prepare('UPDATE `osztaly` SET `nev` = ?, `manager_azonosito` = ? WHERE `osztaly`.`id` = ?');
-                $stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
-                $stmt ->bindParam(2, $_POST["manager_id"],PDO::PARAM_INT);
-                $stmt->bindParam(3,$_GET['id'], PDO::PARAM_INT);
-                if($stmt->execute()){
-                    header("Location: index.php");
-                }else{
-                    $msg = 'Sikertelen létrehozás!';
-                }
-            }else{
-                $msg = 'Válassz managert!!';
+        $stmt = $pdo->prepare('UPDATE `osztaly` SET `nev` = ? WHERE `osztaly`.`id` = ?');
+        $stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
+        $stmt->bindParam(2,$_GET['id'], PDO::PARAM_INT);
+        if($_POST["manager_id"] == 0 && $stmt->execute()){
+            header("Location: index.php");
+        }else if($_POST["manager_id"] != 0 && $stmt->execute()){
+            $update_manager = $pdo->prepare("UPDATE `dolgozo` SET `manager_in_osztaly` = ? WHERE `dolgozo`.`id` = ?");
+            $update_manager->bindParam(1, $_GET["id"], PDO::PARAM_INT);
+            $update_manager->bindParam(2,$_POST['manager_id'], PDO::PARAM_INT);
+            if($update_manager->execute()){
+                header("Location: index.php");
             }
+        }
     }
 }
 ?>
@@ -43,7 +43,7 @@ if(isset($_GET['id'])){
                 <select name="manager_id">
                     <option value="0">Válasszon managert!</option>
                     <?php foreach($dolgozok as $dolgozo): ?>
-                        <option <?php echo ($dolgozo['id'] == $osztaly["dolgozoid"]) ? "selected" : "" ?> value="<?=$dolgozo['id']?>"><?=$dolgozo['veznev']." ".$dolgozo['kernev']?></option>
+                        <option value="<?=$dolgozo['id']?>"><?=$dolgozo['veznev']." ".$dolgozo['kernev']?></option>
                     <?php endforeach ?>
                 </select>
             <?php else: ?>

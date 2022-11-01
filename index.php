@@ -3,13 +3,13 @@ include ('functions.php');
 $pdo = pdo_connect_mysql();
 $perPage = 15;
 
-$total_row = $pdo->query('SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id')->rowCount();
+$total_row = $pdo->query('SELECT osztaly.*, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count, (SELECT dolgozo.id FROM dolgozo WHERE dolgozo.manager_in_osztaly = osztaly.id) as manager_id FROM osztaly')->rowCount();
 $pages = ceil($total_row / $perPage);
 
 $page = isset($_GET['page']) ? $_GET["page"] : 1;
 $start = ($page - 1) * $perPage;
 
-$query = "SELECT osztaly.id, osztaly.nev, dolgozo.veznev, dolgozo.kernev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id LIMIT $start,$perPage";
+$query = "SELECT osztaly.*, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count, (SELECT dolgozo.id FROM dolgozo WHERE dolgozo.manager_in_osztaly = osztaly.id) as manager_id FROM osztaly LIMIT $start, $perPage";
 $osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -31,7 +31,16 @@ $osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($osztalyok as $osztaly): ?>
                 <tr>
                     <td><?=$osztaly['nev']?></td>
-                    <td><?=$osztaly['veznev']. " ". $osztaly['kernev']?></td>
+                    <td>
+                        <?php
+                            $manager_stmt = $pdo->prepare("SELECT dolgozo.veznev, dolgozo.kernev FROM dolgozo WHERE id = ?");
+                            $manager_stmt->execute([$osztaly["manager_id"]]);
+                            $manager = $manager_stmt->fetchAll(PDO::FETCH_OBJ);
+                            if($manager){
+                                echo $manager[0]->veznev." ".$manager[0]->kernev;
+                            }
+                        ?>
+                    </td>
                     <td><?=$osztaly['dolgozo_count']?></td>
                     <td class="actions">
                         <a href="edit_department.php?id=<?=$osztaly['id']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>

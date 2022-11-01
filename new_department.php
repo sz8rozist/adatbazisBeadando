@@ -7,23 +7,22 @@ $stmt->execute();
 $dolgozok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if(!empty($_POST)){
-    $osztaly_nev = $_POST['osztaly_nev'];
-    $manager_id = $_POST['manager_id'];
     $check_stmt = $pdo->prepare('SELECT * FROM osztaly WHERE nev=?');
-    $check_stmt->bindParam(1, $osztaly_nev, PDO::PARAM_STR);
+    $check_stmt->bindParam(1, $_POST['osztaly_nev'], PDO::PARAM_STR);
     $check_stmt->execute();
     $row = $check_stmt->fetch(PDO::FETCH_ASSOC);
     if(!$row)
     {
-        if($manager_id != 0){
-            $stmt = $pdo->prepare('INSERT INTO osztaly (nev, manager_azonosito) VALUES (?, ?)');
-            $stmt->bindParam(1, $osztaly_nev, PDO::PARAM_STR);
-            $stmt ->bindParam(2, $manager_id,PDO::PARAM_INT);
-            if($stmt->execute()){
-                header("Location: index.php");
-            }else{
-                $msg = 'Sikertelen létrehozás!';
-            }
+        if($_POST['manager_id'] != 0){
+            $stmt = $pdo->prepare('INSERT INTO osztaly (nev) VALUES (?)');
+            $stmt->bindParam(1, $_POST['osztaly_nev'], PDO::PARAM_STR);
+            $stmt->execute();
+            $last_inserted_id = $pdo->lastInsertId();
+            $update_manager = $pdo->prepare("UPDATE `dolgozo` SET `manager_in_osztaly` = ? WHERE `dolgozo`.`id` = ?");
+            $update_manager->bindParam(1, $last_inserted_id, PDO::PARAM_INT);
+            $update_manager->bindParam(2,$_POST['manager_id'], PDO::PARAM_INT);
+            $update_manager->execute();
+            header("Location: index.php");
         }else{
             $msg = 'Válassz managert!!';
         }

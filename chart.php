@@ -3,7 +3,7 @@ include ('functions.php');
 
 if($_SERVER['REQUEST_METHOD'] == "GET"){
     $pdo = pdo_connect_mysql();
-    $stmt = $pdo->prepare('SELECT osztaly.nev, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count FROM osztaly INNER JOIN dolgozo ON osztaly.manager_azonosito = dolgozo.id');
+    $stmt = $pdo->prepare('SELECT osztaly.*, (SELECT COUNT(dolgozo.id) FROM dolgozo WHERE dolgozo.osztaly_id = osztaly.id) as dolgozo_count, (SELECT dolgozo.id FROM dolgozo WHERE dolgozo.manager_in_osztaly = osztaly.id) as manager_id FROM osztaly');
     $stmt->execute();
     $osztalyok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

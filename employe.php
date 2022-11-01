@@ -11,7 +11,6 @@ $start = ($page - 1) * $perPage;
 
 $query = "SELECT dolgozo.*, osztaly.nev as osztaly FROM dolgozo INNER JOIN osztaly ON dolgozo.osztaly_id = osztaly.id LIMIT $start,$perPage";
 $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <?=template_header('Dolgozók')?>
     <div class="content read">
