@@ -13,19 +13,11 @@ if(!empty($_POST)){
     $row = $check_stmt->fetch(PDO::FETCH_ASSOC);
     if(!$row)
     {
-        if($_POST['manager_id'] != 0){
             $stmt = $pdo->prepare('INSERT INTO osztaly (nev) VALUES (?)');
             $stmt->bindParam(1, $_POST['osztaly_nev'], PDO::PARAM_STR);
             $stmt->execute();
-            $last_inserted_id = $pdo->lastInsertId();
-            $update_manager = $pdo->prepare("UPDATE `dolgozo` SET `manager_in_osztaly` = ? WHERE `dolgozo`.`id` = ?");
-            $update_manager->bindParam(1, $last_inserted_id, PDO::PARAM_INT);
-            $update_manager->bindParam(2,$_POST['manager_id'], PDO::PARAM_INT);
-            $update_manager->execute();
             header("Location: index.php");
-        }else{
-            $msg = 'Válassz managert!!';
-        }
+        
     }else{
         $msg = 'Az osztálynév foglalt!';
     }
@@ -39,19 +31,6 @@ if(!empty($_POST)){
         <form action="new_department.php" method="post">
             <label for="nev">Név</label>
             <input type="text" name="osztaly_nev" placeholder="Osztály neve" id="osztaly_nev">
-            <?php if(!empty($dolgozok)): ?>
-            <label for="manager">Manager</label>
-            <?php endif; ?>
-            <?php if(!empty($dolgozok)): ?>
-            <select name="manager_id">
-                <option value="0">Válasszon managert!</option>
-                <?php foreach($dolgozok as $dolgozo): ?>
-                <option value="<?=$dolgozo['id']?>"><?=$dolgozo['veznev']." ".$dolgozo['kernev']?></option>
-                <?php endforeach ?>
-            </select>
-            <?php else: ?>
-            <p>Nincs dolgozó a rendszerben.</p>
-            <?php endif; ?>
             <input type="submit" value="Mentés">
         </form>
         <?php if ($msg): ?>

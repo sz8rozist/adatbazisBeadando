@@ -8,10 +8,10 @@ if(!empty($_POST)){
             $stmt = $pdo->prepare('INSERT INTO dolgozo (veznev, kernev, szulido, fizetes, nem, osztaly_id) VALUES (?, ?, ?, ?, ?, ?)');
             $stmt->bindParam(1, $_POST["veznev"], PDO::PARAM_STR);
             $stmt->bindParam(2, $_POST["kernev"], PDO::PARAM_STR);
-            $stmt ->bindParam(3, $_POST["szulido"],PDO::PARAM_STR);
-            $stmt ->bindParam(4, $_POST["fizetes"],PDO::PARAM_INT);
-            $stmt ->bindParam(5, $_POST["nem"],PDO::PARAM_INT);
-            $stmt ->bindParam(6, $_POST["osztaly_id"],PDO::PARAM_INT);
+            $stmt->bindParam(3, $_POST["szulido"],PDO::PARAM_STR);
+            $stmt->bindParam(4, $_POST["fizetes"],PDO::PARAM_INT);
+            $stmt->bindParam(5, $_POST["nem"],PDO::PARAM_INT);
+            $stmt->bindParam(6, $_POST["osztaly_id"],PDO::PARAM_INT);
             if($stmt->execute()){
                 header("Location: employe.php");
             }else{
