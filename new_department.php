@@ -25,18 +25,27 @@ if(!empty($_POST)){
 ?>
 
 <?=template_header('Új osztály')?>
-<div class="content read">
-    <div class="content update">
-        <h2>Osztály hozzáadása</h2>
-        <form action="new_department.php" method="post">
-            <label for="nev">Név</label>
-            <input type="text" name="osztaly_nev" placeholder="Osztály neve" id="osztaly_nev">
-            <input type="submit" value="Mentés">
-        </form>
-        <?php if ($msg): ?>
-            <p class="error"><?=$msg?></p>
-        <?php endif; ?>
+<div class="container">
+    <div class="row mt-5 mb-3">
+        <div class="col-lg-12">
+            <h2>Osztály hozzáadása</h2>
+            <hr>
+        </div>
     </div>
+    <div class="row mt-3">
+        <div class="col-lg-4">
+            <form method="post" action="new_department.php">
+                <div class="mb-3">
+                    <label for="nev" class="form-label">Név</label>
+                    <input type="text" class="form-control" name="osztaly_nev" id="nev">
+                </div>
+                <button type="submit" class="btn btn-success">Mentés</button>
+            </form>
+        </div>
+    </div>
+    <?php if ($msg): ?>
+        <div class="alert alert-danger"><?=$msg?></div>
+    <?php endif; ?>
 </div>
 
 <?=template_footer()?>

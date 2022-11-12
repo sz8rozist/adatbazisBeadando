@@ -27,39 +27,58 @@ if(isset($_GET['id'])){
 }
 ?>
 <?=template_header('Dolgozó szerkesztés')?>
-<div class="content read">
-    <div class="content update">
-        <h2>Dolgozó szerkesztése</h2>
-        <form action="edit_employe.php?id=<?=$_GET['id']?>" method="post">
-            <label for="veznev">Vezetéknév</label>
-            <input type="text" name="veznev" value="<?=$dolgozo->veznev?>" id="veznev">
-            <label for="kernev">Keresztnév</label>
-            <input type="text" name="kernev" value="<?=$dolgozo->kernev?>" id="kernev">
-            <label for="szulido">Születési idő</label>
-            <input type="date" name="szulido" value="<?=$dolgozo->szulido?>"  id="szulido">
-            <label for="fizetes">Fizetés</label>
-            <input type="text" name="fizetes" value="<?=$dolgozo->fizetes?>" id="fizetes">
-            <Label for="neme">Neme</Label>
-            <select id="neme" name="nem">
-                <?php for($i = 0; $i<=count($nem); $i++): ?>
-                    <option <?=($i == $dolgozo->nem)?"selected":""?> value="<?=$i?>"><?=$nem[$i]?></option>
-                <?php endfor; ?>
-            </select>
-            <?php if(!empty($osztalyok)): ?>
-                <label for="osztaly">Osztály</label>
-                <select id="neme" name="osztaly_id">
-                    <option value="0">Nincs osztály</option>
-                    <?php foreach($osztalyok as $osztaly): ?>
-                        <option <?=($osztaly['id'] == $dolgozo->osztaly_id)?"selected":""?> value="<?=$osztaly['id']?>"><?=$osztaly['nev']?></option>
-                    <?php endforeach; ?>
-                </select>
-            <?php endif; ?>
-            <input type="submit" value="Mentés">
-        </form>
-        <?php if ($msg): ?>
-            <p class="error"><?=$msg?></p>
-        <?php endif; ?>
+<div class="container">
+    <div class="row mt-5 mb-3">
+        <div class="col-lg-12">
+            <h2>Dolgozó szerkesztése</h2>
+            <hr>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <form action="edit_employe.php?id=<?=$_GET['id']?>" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="veznev">Vezetéknév</label>
+                    <input type="text" class="form-control" name="veznev" value="<?=$dolgozo->veznev?>" id="veznev">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="kernev">Keresztnév</label>
+                    <input type="text" class="form-control" name="kernev" value="<?=$dolgozo->kernev?>" id="kernev">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="szulido">Születési idő</label>
+                    <input type="date" class="form-control" name="szulido" value="<?=$dolgozo->szulido?>"  id="szulido">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="fizetes">Fizetés</label>
+                    <input type="text" class="form-control" name="fizetes" value="<?=$dolgozo->fizetes?>" id="fizetes">
+                </div>
+                <div class="mb-3">
+                    <Label class="form-label" for="neme">Neme</Label>
+                    <select id="neme" class="form-select" name="nem">
+                        <?php for($i = 0; $i<=count($nem); $i++): ?>
+                            <option <?=($i == $dolgozo->nem)?"selected":""?> value="<?=$i?>"><?=$nem[$i]?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <?php if(!empty($osztalyok)): ?>
+                    <div class="mb-3">
+                        <label for="osztaly" class="form-label">Osztály</label>
+                        <select class="form-select" id="neme" name="osztaly_id">
+                            <option value="0">Nincs osztály</option>
+                            <?php foreach($osztalyok as $osztaly): ?>
+                                <option <?=($osztaly['id'] == $dolgozo->osztaly_id)?"selected":""?> value="<?=$osztaly['id']?>"><?=$osztaly['nev']?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+                <button class="btn btn-success" type="submit">Mentés</button>
+            </form>
+        </div>
+    </div>
+        <?php if ($msg): ?>
+            <div class="alert alert-danger"><?=$msg?></div>
+        <?php endif; ?>
 </div>
 
 <?=template_footer()?>

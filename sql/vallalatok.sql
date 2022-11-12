@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2022. Okt 02. 12:14
+-- Létrehozás ideje: 2022. Nov 12. 23:49
 -- Kiszolgáló verziója: 10.4.25-MariaDB
--- PHP verzió: 8.1.10
+-- PHP verzió: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,10 +18,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Adatbázis: `vallalatok`
+-- Adatbázis: `vallalat`
 --
-CREATE DATABASE IF NOT EXISTS `vallalatok` DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
-USE `vallalatok`;
+CREATE DATABASE IF NOT EXISTS `vallalat` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `vallalat`;
 
 -- --------------------------------------------------------
 
@@ -29,33 +29,20 @@ USE `vallalatok`;
 -- Tábla szerkezet ehhez a táblához `dolgozik`
 --
 
-DROP TABLE IF EXISTS `dolgozik`;
-CREATE TABLE IF NOT EXISTS `dolgozik` (
-  `azonosito` int(11) NOT NULL,
-  `dolgozo_azonosito` int(11) NOT NULL,
-  `vallalat_cegjegyzekszam` int(11) NOT NULL,
-  `miota` date NOT NULL,
-  `fizetes` int(11) NOT NULL,
-  PRIMARY KEY (`azonosito`),
-  KEY `ki_dolgozik` (`dolgozo_azonosito`),
-  KEY `hol_dolgozik` (`vallalat_cegjegyzekszam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
-
--- --------------------------------------------------------
+CREATE TABLE `dolgozik` (
+  `id` int(11) NOT NULL,
+  `projekt_id` int(11) NOT NULL,
+  `dolgozo_id` int(11) NOT NULL,
+  `kezdes_datum` date NOT NULL,
+  `munkakor` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Tábla szerkezet ehhez a táblához `dolgozik_rajta`
+-- A tábla adatainak kiíratása `dolgozik`
 --
 
-DROP TABLE IF EXISTS `dolgozik_rajta`;
-CREATE TABLE IF NOT EXISTS `dolgozik_rajta` (
-  `azonosito` int(11) NOT NULL,
-  `projekt_nev` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `dolgozo_azonosito` int(11) NOT NULL,
-  PRIMARY KEY (`azonosito`),
-  KEY `dolgozo` (`dolgozo_azonosito`),
-  KEY `projekt` (`projekt_nev`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+INSERT INTO `dolgozik` (`id`, `projekt_id`, `dolgozo_id`, `kezdes_datum`, `munkakor`) VALUES
+(4, 2, 2, '2022-11-16', 'Frontend fejlesztő');
 
 -- --------------------------------------------------------
 
@@ -63,15 +50,44 @@ CREATE TABLE IF NOT EXISTS `dolgozik_rajta` (
 -- Tábla szerkezet ehhez a táblához `dolgozo`
 --
 
-DROP TABLE IF EXISTS `dolgozo`;
-CREATE TABLE IF NOT EXISTS `dolgozo` (
-  `azonosito` int(11) NOT NULL,
-  `vezeteknev` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `keresztnev` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `keszseg` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `telefonszam` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  PRIMARY KEY (`azonosito`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+CREATE TABLE `dolgozo` (
+  `id` int(11) NOT NULL,
+  `veznev` varchar(40) NOT NULL,
+  `kernev` varchar(40) NOT NULL,
+  `nem` tinyint(4) NOT NULL,
+  `szulido` date NOT NULL,
+  `fizetes` int(11) NOT NULL,
+  `manager_in_osztaly` int(11) NOT NULL,
+  `osztaly_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- A tábla adatainak kiíratása `dolgozo`
+--
+
+INSERT INTO `dolgozo` (`id`, `veznev`, `kernev`, `nem`, `szulido`, `fizetes`, `manager_in_osztaly`, `osztaly_id`) VALUES
+(1, 'Rózsa', 'István', 1, '1998-02-28', 350000, 0, 0),
+(2, 'Kiss', 'Béla', 1, '1955-02-05', 450000, 0, 2),
+(3, 'asd', 'dsadsad', 1, '2022-11-09', 25000, 0, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `osztaly`
+--
+
+CREATE TABLE `osztaly` (
+  `id` int(11) NOT NULL,
+  `nev` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- A tábla adatainak kiíratása `osztaly`
+--
+
+INSERT INTO `osztaly` (`id`, `nev`) VALUES
+(2, 'HR'),
+(3, 'dsad');
 
 -- --------------------------------------------------------
 
@@ -79,51 +95,78 @@ CREATE TABLE IF NOT EXISTS `dolgozo` (
 -- Tábla szerkezet ehhez a táblához `projekt`
 --
 
-DROP TABLE IF EXISTS `projekt`;
-CREATE TABLE IF NOT EXISTS `projekt` (
-  `nev` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `idotartam` int(11) NOT NULL,
-  `idotartam_me` varchar(10) COLLATE utf8_hungarian_ci NOT NULL,
-  `ar` int(11) NOT NULL,
-  PRIMARY KEY (`nev`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
-
--- --------------------------------------------------------
+CREATE TABLE `projekt` (
+  `id` int(11) NOT NULL,
+  `nev` varchar(40) NOT NULL,
+  `ar` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Tábla szerkezet ehhez a táblához `vallalat`
+-- A tábla adatainak kiíratása `projekt`
 --
 
-DROP TABLE IF EXISTS `vallalat`;
-CREATE TABLE IF NOT EXISTS `vallalat` (
-  `cegjegyzekszam` int(11) NOT NULL,
-  `nev` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `alapitasi_datum` date NOT NULL,
-  `orszag` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `iranyitoszam` int(11) NOT NULL,
-  `varos` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `utca` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  `hazszam` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
-  PRIMARY KEY (`cegjegyzekszam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+INSERT INTO `projekt` (`id`, `nev`, `ar`) VALUES
+(2, 'DASDdas', 50000);
 
 --
--- Megkötések a kiírt táblákhoz
+-- Indexek a kiírt táblákhoz
 --
 
 --
--- Megkötések a táblához `dolgozik`
+-- A tábla indexei `dolgozik`
 --
 ALTER TABLE `dolgozik`
-  ADD CONSTRAINT `hol_dolgozik` FOREIGN KEY (`vallalat_cegjegyzekszam`) REFERENCES `vallalat` (`cegjegyzekszam`),
-  ADD CONSTRAINT `ki_dolgozik` FOREIGN KEY (`dolgozo_azonosito`) REFERENCES `dolgozo` (`azonosito`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `projekt_id` (`projekt_id`),
+  ADD KEY `dolgozo_id` (`dolgozo_id`);
 
 --
--- Megkötések a táblához `dolgozik_rajta`
+-- A tábla indexei `dolgozo`
 --
-ALTER TABLE `dolgozik_rajta`
-  ADD CONSTRAINT `dolgozo` FOREIGN KEY (`dolgozo_azonosito`) REFERENCES `dolgozo` (`azonosito`),
-  ADD CONSTRAINT `projekt` FOREIGN KEY (`projekt_nev`) REFERENCES `projekt` (`nev`);
+ALTER TABLE `dolgozo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `manager_in_osztaly` (`manager_in_osztaly`),
+  ADD KEY `osztaly_id` (`osztaly_id`);
+
+--
+-- A tábla indexei `osztaly`
+--
+ALTER TABLE `osztaly`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- A tábla indexei `projekt`
+--
+ALTER TABLE `projekt`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
+
+--
+-- AUTO_INCREMENT a táblához `dolgozik`
+--
+ALTER TABLE `dolgozik`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT a táblához `dolgozo`
+--
+ALTER TABLE `dolgozo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `osztaly`
+--
+ALTER TABLE `osztaly`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `projekt`
+--
+ALTER TABLE `projekt`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

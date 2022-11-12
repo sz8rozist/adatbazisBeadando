@@ -7,7 +7,7 @@ $nem = array("0" => "Nő", "1" => "Férfi");
 if(isset($_GET['id'])){
     $stmt = $pdo->prepare("SELECT * FROM projekt WhERE id = ?");
     $stmt->execute([$_GET["id"]]);
-    $projekt = $stmt->fetch(PDO::FETCH_OBJ);
+    $projekt = $stmt->fetch(PDO::FETCH_ASSOC);
     if(!empty($_POST)){
         $update_stmt = $pdo->prepare("UPDATE `projekt` SET `nev` = ?, `ar` = ? WHERE `projekt`.`id` = ?");
         $update_stmt->bindParam(1, $_POST["nev"], PDO::PARAM_STR);
@@ -22,20 +22,31 @@ if(isset($_GET['id'])){
 }
 ?>
 <?=template_header('Projekt szerkesztés')?>
-<div class="content read">
-    <div class="content update">
-        <h2>Projekt szerkesztése</h2>
-        <form action="edit_projekt.php?id=<?=$_GET['id']?>" method="post">
-            <label for="nev">Név</label>
-            <input type="text" name="nev" value="<?=$projekt->nev?>" id="nev">
-            <label for="ar">Ár</label>
-            <input type="text" name="ar" value="<?=$projekt->ar?>" id="ar">
-            <input type="submit" value="Mentés">
-        </form>
-        <?php if ($msg): ?>
-            <p class="error"><?=$msg?></p>
-        <?php endif; ?>
+<<div class="container">
+    <div class="row mt-5 mb-3">
+        <div class="col-lg-12">
+            <h2>Projekt szerkesztése</h2>
+            <hr>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <form action="edit_projekt.php?id=<?= $_GET['id'] ?>" method="post">
+                <div class="mb-3">
+                    <label for="nev" class="form-label">Név</label>
+                    <input type="text" name="nev" class="form-control" value="<?= $projekt['nev'] ?>" id="nev">
+                </div>
+                <div class="mb-3">
+                    <label for="ar" class="form-label">Név</label>
+                    <input type="text" name="ar" class="form-control" value="<?= $projekt['ar'] ?>" id="ar">
+                </div>
+                <button type="submit" class="btn btn-success">Mentés</button>
+            </form>
+        </div>
+    </div>
+    <?php if ($msg): ?>
+        <div class="alert alert-danger"><?= $msg ?></div>
+    <?php endif; ?>
 </div>
 
 <?=template_footer()?>

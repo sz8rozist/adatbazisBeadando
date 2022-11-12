@@ -20,3 +20,12 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["projekt_id"])){
     $stmt->execute([$_GET['projekt_id']]);
     header("Location: projekt.php");
 }
+
+if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["dolgozik_id"])){
+    $query = $pdo->prepare("SELECT projekt.id FROM projekt, dolgozik WHERE projekt.id = dolgozik.projekt_id AND dolgozik.id = ?");
+    $query->execute([$_GET['dolgozik_id']]);
+    $projekt_id = $query->fetchColumn();
+    $stmt = $pdo->prepare('DELETE FROM dolgozik WHERE id = ?');
+    $stmt->execute([$_GET['dolgozik_id']]);
+    header("Location: projekt_adatok.php?id=".$projekt_id);
+}
