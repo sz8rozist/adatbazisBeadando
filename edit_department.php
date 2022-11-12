@@ -41,7 +41,7 @@ if(isset($_GET['id'])){
             <?php endif; ?>
             <?php if(!empty($dolgozok)): ?>
                 <select name="manager_id">
-                    <option value="0">Válasszon managert!</option>
+                    <option value="0">Nincs manager</option>
                     <?php foreach($dolgozok as $dolgozo): ?>
                         <option value="<?=$dolgozo['id']?>"><?=$dolgozo['veznev']." ".$dolgozo['kernev']?></option>
                     <?php endforeach ?>

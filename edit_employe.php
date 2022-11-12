@@ -6,10 +6,9 @@ $nem = array("0" => "Nő", "1" => "Férfi");
 
 if(isset($_GET['id'])){
     $osztalyok = $pdo->query("SELECT * FROM osztaly")->fetchAll(PDO::FETCH_ASSOC);
-    $stmt = $pdo->prepare("SELECT dolgozo.*, osztaly.nev as osztaly FROM dolgozo INNER JOIN osztaly ON dolgozo.osztaly_id = osztaly.id WhERE dolgozo.id = ?");
-    $stmt->bindParam(1,$_GET["id"], PDO::PARAM_INT);
-    $stmt->execute();
-    $dolgozo = $stmt->fetch();
+    $stmt = $pdo->prepare("SELECT dolgozo.* FROM dolgozo WhERE dolgozo.id = ?");
+    $stmt->execute([$_GET["id"]]);
+    $dolgozo = $stmt->fetch(PDO::FETCH_OBJ);
     if(!empty($_POST)){
         $update_stmt = $pdo->prepare("UPDATE `dolgozo` SET `veznev` = ?, `kernev` = ?, `nem` = ?, `szulido` = ?, `fizetes` = ?, `osztaly_id` = ? WHERE `dolgozo`.`id` = ?");
         $update_stmt->bindParam(1, $_POST["veznev"], PDO::PARAM_STR);
@@ -33,24 +32,25 @@ if(isset($_GET['id'])){
         <h2>Dolgozó szerkesztése</h2>
         <form action="edit_employe.php?id=<?=$_GET['id']?>" method="post">
             <label for="veznev">Vezetéknév</label>
-            <input type="text" name="veznev" value="<?=$dolgozo["veznev"]?>" id="veznev">
+            <input type="text" name="veznev" value="<?=$dolgozo->veznev?>" id="veznev">
             <label for="kernev">Keresztnév</label>
-            <input type="text" name="kernev" value="<?=$dolgozo["kernev"]?>" id="kernev">
+            <input type="text" name="kernev" value="<?=$dolgozo->kernev?>" id="kernev">
             <label for="szulido">Születési idő</label>
-            <input type="date" name="szulido" value="<?=$dolgozo["szulido"]?>"  id="szulido">
+            <input type="date" name="szulido" value="<?=$dolgozo->szulido?>"  id="szulido">
             <label for="fizetes">Fizetés</label>
-            <input type="text" name="fizetes" value="<?=$dolgozo["fizetes"]?>" id="fizetes">
+            <input type="text" name="fizetes" value="<?=$dolgozo->fizetes?>" id="fizetes">
             <Label for="neme">Neme</Label>
             <select id="neme" name="nem">
                 <?php for($i = 0; $i<=count($nem); $i++): ?>
-                    <option <?=($i == $dolgozo['nem'])?"selected":""?> value="<?=$i?>"><?=$nem[$i]?></option>
+                    <option <?=($i == $dolgozo->nem)?"selected":""?> value="<?=$i?>"><?=$nem[$i]?></option>
                 <?php endfor; ?>
             </select>
             <?php if(!empty($osztalyok)): ?>
                 <label for="osztaly">Osztály</label>
                 <select id="neme" name="osztaly_id">
+                    <option value="0">Nincs osztály</option>
                     <?php foreach($osztalyok as $osztaly): ?>
-                        <option <?=($osztaly['id'] == $dolgozo['osztaly'])?"selected":""?> value="<?=$osztaly['id']?>"><?=$osztaly['nev']?></option>
+                        <option <?=($osztaly['id'] == $dolgozo->osztaly_id)?"selected":""?> value="<?=$osztaly['id']?>"><?=$osztaly['nev']?></option>
                     <?php endforeach; ?>
                 </select>
             <?php endif; ?>

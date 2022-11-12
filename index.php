@@ -38,6 +38,8 @@ $osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                             $manager = $manager_stmt->fetchAll(PDO::FETCH_OBJ);
                             if($manager){
                                 echo $manager[0]->veznev." ".$manager[0]->kernev;
+                            }else{
+                                echo "Nincs manager";
                             }
                         ?>
                     </td>
