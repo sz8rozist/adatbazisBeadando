@@ -8,6 +8,20 @@
 #projekt_table tbody tr{
     cursor: pointer;
 }
+.profileimg{
+    width: 50px;
+    border-radius: 50%;
+}
+.navbar .navbar-nav .nav-item .nav-link i{
+    margin-right: 5px;
+}
+
+.navbar{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+.card, .table, .accordion {
+    box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);
+}
 
 @media print {
     @page{

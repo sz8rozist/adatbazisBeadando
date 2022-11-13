@@ -4,11 +4,15 @@ $msg = "";
 $pdo = pdo_connect_mysql();
 
 if (!empty($_POST)) {
-    $stmt = $pdo->prepare('INSERT INTO projekt (nev, ar) VALUES (?, ?)');
-    if ($stmt->execute([$_POST["nev"], $_POST["ar"]])) {
-        header("Location: projekt.php");
-    } else {
-        $msg = 'Sikertelen beszúrás!';
+    if(empty($_POST["nev"]) && empty($_POST["ar"])){
+        $msg .= "Minden mező kitöltése kötelező!";
+    }else{
+        $stmt = $pdo->prepare('INSERT INTO projekt (nev, ar) VALUES (?, ?)');
+        if ($stmt->execute([$_POST["nev"], $_POST["ar"]])) {
+            header("Location: projekt.php");
+        } else {
+            $msg = 'Sikertelen beszúrás!';
+        }
     }
 }
 ?>
@@ -21,6 +25,9 @@ if (!empty($_POST)) {
         </div>
     </div>
     <div class="row mt-3">
+        <?php if ($msg): ?>
+            <div class="alert alert-danger mb-3"><?= $msg ?></div>
+        <?php endif; ?>
         <div class="col-lg-4">
             <form action="new_projekt.php" method="post">
                 <div class="mb-3">
@@ -35,9 +42,6 @@ if (!empty($_POST)) {
             </form>
         </div>
     </div>
-    <?php if ($msg): ?>
-        <p class="error"><?= $msg ?></p>
-    <?php endif; ?>
 </div>
 
 <?= template_footer() ?>

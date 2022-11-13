@@ -9,14 +9,18 @@ if(isset($_GET['id'])){
     $stmt->execute([$_GET["id"]]);
     $projekt = $stmt->fetch(PDO::FETCH_ASSOC);
     if(!empty($_POST)){
-        $update_stmt = $pdo->prepare("UPDATE `projekt` SET `nev` = ?, `ar` = ? WHERE `projekt`.`id` = ?");
-        $update_stmt->bindParam(1, $_POST["nev"], PDO::PARAM_STR);
-        $update_stmt->bindParam(2, $_POST["ar"], PDO::PARAM_STR);
-        $update_stmt->bindParam(3,$_GET['id'],PDO::PARAM_INT);
-        if($update_stmt->execute()){
-            header("Location: projekt.php");
+        if(empty($_POST["nev"]) && empty($_POST["ar"])){
+            $msg .= "Minden mező kitöltése kötelező!";
         }else{
-            $msg = 'Sikertelen létrehozás!';
+            $update_stmt = $pdo->prepare("UPDATE `projekt` SET `nev` = ?, `ar` = ? WHERE `projekt`.`id` = ?");
+            $update_stmt->bindParam(1, $_POST["nev"], PDO::PARAM_STR);
+            $update_stmt->bindParam(2, $_POST["ar"], PDO::PARAM_STR);
+            $update_stmt->bindParam(3,$_GET['id'],PDO::PARAM_INT);
+            if($update_stmt->execute()){
+                header("Location: projekt.php");
+            }else{
+                $msg = 'Sikertelen létrehozás!';
+            }
         }
     }
 }
@@ -30,6 +34,9 @@ if(isset($_GET['id'])){
         </div>
     </div>
     <div class="row">
+        <?php if ($msg): ?>
+            <div class="alert alert-danger mb-3"><?= $msg ?></div>
+        <?php endif; ?>
         <div class="col-lg-4">
             <form action="edit_projekt.php?id=<?= $_GET['id'] ?>" method="post">
                 <div class="mb-3">
@@ -44,9 +51,6 @@ if(isset($_GET['id'])){
             </form>
         </div>
     </div>
-    <?php if ($msg): ?>
-        <div class="alert alert-danger"><?= $msg ?></div>
-    <?php endif; ?>
 </div>
 
 <?=template_footer()?>

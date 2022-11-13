@@ -28,10 +28,10 @@ $osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-bordered">
         <thead>
         <tr>
-            <td>Név</td>
-            <td>Manager</td>
-            <td>Dolgozók száma</td>
-            <td></td>
+            <th>Név</th>
+            <th>Manager</th>
+            <th>Dolgozók száma</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>

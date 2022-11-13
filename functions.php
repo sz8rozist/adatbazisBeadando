@@ -27,7 +27,7 @@ function template_header($title)
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 	</head>
 	<body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
   <div class="container">
     <a class="navbar-brand" href="index.php">Vállalatirányítási rendszer</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ function template_header($title)
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php"><i class="fas fa-building"></i>Osztályok</a>
+          <a class="nav-link" aria-current="page" href="index.php"><i class="fas fa-building"></i>Osztályok</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="employe.php"><i class="fas fa-users"></i>Dolgozók</a>

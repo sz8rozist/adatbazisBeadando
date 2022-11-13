@@ -33,19 +33,21 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-bordered">
         <thead>
         <tr>
-            <td>Vezetéknév</td>
-            <td>Keresztnév</td>
-            <td>Nem</td>
-            <td>Születési idő</td>
-            <td>Fizetés</td>
-            <td>Osztály</td>
-            <td></td>
+            <th>Profilkép</th>
+            <th>Vezetéknév</th>
+            <th>Keresztnév</th>
+            <th>Nem</th>
+            <th>Születési idő</th>
+            <th>Fizetés</th>
+            <th>Osztály</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <?php if (!empty($dolgozok)): ?>
             <?php foreach ($dolgozok as $dolgozo): ?>
                 <tr>
+                    <td><img alt="profile" class="profileimg" src="<?php echo (empty($dolgozo["profilkep"])) ? "./img/profileavatar.webp" : "./profileimg/".$dolgozo["profilkep"]; ?>"></td>
                     <td><?= $dolgozo['veznev'] ?></td>
                     <td><?= $dolgozo['kernev'] ?></td>
                     <td><?= ($dolgozo['nem'] == 0) ? "Nő" : "Férfi" ?></td>
@@ -92,6 +94,7 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
             <caption>Jól kereső dolgozók</caption>
             <thead>
             <tr>
+                <th>Osztály</th>
                 <th>Vezetéknév</th>
                 <th>Keresztnév</th>
                 <th>Fizetés</th>
@@ -100,6 +103,7 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
             <tbody>
             <?php foreach ($legtobb_fizetes_result as $row): ?>
                 <tr>
+                    <td><?= $row["osztaly"] ?></td>
                     <td><?= $row["veznev"] ?></td>
                     <td><?= $row["kernev"] ?></td>
                     <td><?= $row["max_fizetes"] ?></td>

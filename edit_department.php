@@ -13,19 +13,24 @@ if (isset($_GET['id'])) {
     $osztaly = $osztaly_stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!empty($_POST)) {
-        $stmt = $pdo->prepare('UPDATE `osztaly` SET `nev` = ? WHERE `osztaly`.`id` = ?');
-        $stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
-        $stmt->bindParam(2, $_GET['id'], PDO::PARAM_INT);
-        if ($_POST["manager_id"] == 0 && $stmt->execute()) {
-            header("Location: index.php");
-        } else if ($_POST["manager_id"] != 0 && $stmt->execute()) {
-            $update_manager = $pdo->prepare("UPDATE `dolgozo` SET `manager_in_osztaly` = ? WHERE `dolgozo`.`id` = ?");
-            $update_manager->bindParam(1, $_GET["id"], PDO::PARAM_INT);
-            $update_manager->bindParam(2, $_POST['manager_id'], PDO::PARAM_INT);
-            if ($update_manager->execute()) {
+        if(empty($_POST["osztaly_nev"])){
+            $msg .= "Minden mező kitöltése kötelező!";
+        }else{
+            $stmt = $pdo->prepare('UPDATE `osztaly` SET `nev` = ? WHERE `osztaly`.`id` = ?');
+            $stmt->bindParam(1, $_POST["osztaly_nev"], PDO::PARAM_STR);
+            $stmt->bindParam(2, $_GET['id'], PDO::PARAM_INT);
+            if ($_POST["manager_id"] == 0 && $stmt->execute()) {
                 header("Location: index.php");
+            } else if ($_POST["manager_id"] != 0 && $stmt->execute()) {
+                $update_manager = $pdo->prepare("UPDATE `dolgozo` SET `manager_in_osztaly` = ? WHERE `dolgozo`.`id` = ?");
+                $update_manager->bindParam(1, $_GET["id"], PDO::PARAM_INT);
+                $update_manager->bindParam(2, $_POST['manager_id'], PDO::PARAM_INT);
+                if ($update_manager->execute()) {
+                    header("Location: index.php");
+                }
             }
         }
+
     }
 }
 ?>
@@ -38,6 +43,9 @@ if (isset($_GET['id'])) {
         </div>
     </div>
     <div class="row">
+        <?php if ($msg): ?>
+            <div class="alert alert-danger mb-3"><?= $msg ?></div>
+        <?php endif; ?>
         <div class="col-lg-4">
             <form action="edit_department.php?id=<?= $_GET['id'] ?>" method="post">
                 <div class="mb-3">
@@ -62,9 +70,6 @@ if (isset($_GET['id'])) {
             </form>
         </div>
     </div>
-    <?php if ($msg): ?>
-        <div class="alert alert-danger"><?= $msg ?></div>
-    <?php endif; ?>
 </div>
 
 <?= template_footer() ?>

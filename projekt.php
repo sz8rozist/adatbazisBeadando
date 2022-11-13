@@ -29,9 +29,9 @@ $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <table id="projekt_table" class="table table-bordered">
         <thead>
         <tr>
-            <td>Név</td>
-            <td>Ár</td>
-            <td></td>
+            <th>Név</th>
+            <th>Ár</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
