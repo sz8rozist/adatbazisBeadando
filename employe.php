@@ -12,7 +12,7 @@ $start = ($page - 1) * $perPage;
 $query = "SELECT dolgozo.* FROM dolgozo LIMIT $start,$perPage";
 $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
-
+//TODO: Itt lehet ez lesz a jó: SELECT osztaly_id, nev, fizetes FROM dolgozo AS D1 WHERE fizetes = (SELECT MAX(fizetes) FROM dolgozo AS D2 WHERE d1.osztaly_id = D2.osztaly_id)
 $legtobb_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, MAX(dolgozo.fizetes) as max_fizetes, osztaly.nev as osztaly FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id");
 $legtobb_fizetes_query->execute();
 $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
@@ -39,6 +39,7 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
             <th>Nem</th>
             <th>Születési idő</th>
             <th>Fizetés</th>
+            <th>Munkakör</th>
             <th>Osztály</th>
             <th></th>
         </tr>
@@ -53,6 +54,7 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= ($dolgozo['nem'] == 0) ? "Nő" : "Férfi" ?></td>
                     <td><?= $dolgozo['szulido'] ?></td>
                     <td><?= $dolgozo['fizetes'] ?></td>
+                    <td><?= $dolgozo['munkakor'] ?></td>
                     <td>
                         <?php
                         $stmt = $pdo->prepare("SELECT osztaly.nev FROM osztaly WHERE osztaly.id = ?");

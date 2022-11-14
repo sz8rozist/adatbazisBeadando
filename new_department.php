@@ -19,7 +19,7 @@ if(!empty($_POST)){
             $stmt = $pdo->prepare('INSERT INTO osztaly (nev) VALUES (?)');
             $stmt->bindParam(1, $_POST['osztaly_nev'], PDO::PARAM_STR);
             $stmt->execute();
-            header("Location: index.php");
+            header("Location: department.php");
 
         }else{
             $msg = 'Az osztálynév foglalt!';

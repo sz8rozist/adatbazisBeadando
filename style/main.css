@@ -5,9 +5,7 @@
     font-size: 20px;
     text-align: center;
 }
-#projekt_table tbody tr{
-    cursor: pointer;
-}
+
 .profileimg{
     width: 50px;
     border-radius: 50%;
@@ -19,8 +17,12 @@
 .navbar{
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
 }
-.card, .table, .accordion {
+.card, .table{
     box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);
+}
+
+.table{
+    text-align: center;
 }
 
 @media print {

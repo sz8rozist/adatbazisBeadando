@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
     $dolgozo = $stmt->fetch(PDO::FETCH_OBJ);
 
     if (!empty($_POST)) {
-        if (empty($_POST["veznev"]) && empty($_POST["kernev"]) && empty($_POST['szulido']) && empty($_POST['fizetes'])) {
+        if (empty($_POST["veznev"]) && empty($_POST["kernev"]) && empty($_POST['szulido']) && empty($_POST['fizetes']) && empty($_POST['munkakor'])) {
             $msg .= "Minden mező kitöltése kötelező!";
         } else {
             if (isset($_FILES["profilkep"])) {
@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
                     unlink("profileimg/" . $dolgozo->profilkep);
                 }
             }
-            $update_stmt = $pdo->prepare("UPDATE `dolgozo` SET `veznev` = ?, `kernev` = ?, `nem` = ?, `szulido` = ?, `fizetes` = ?, `osztaly_id` = ?, `profilkep` = ? WHERE `dolgozo`.`id` = ?");
+            $update_stmt = $pdo->prepare("UPDATE `dolgozo` SET `veznev` = ?, `kernev` = ?, `nem` = ?, `szulido` = ?, `fizetes` = ?, `osztaly_id` = ?, `profilkep` = ?, `munkakor` = ? WHERE `dolgozo`.`id` = ?");
             $update_stmt->bindParam(1, $_POST["veznev"], PDO::PARAM_STR);
             $update_stmt->bindParam(2, $_POST["kernev"], PDO::PARAM_STR);
             $update_stmt->bindParam(4, $_POST["szulido"], PDO::PARAM_STR);
@@ -32,7 +32,8 @@ if (isset($_GET['id'])) {
             $update_stmt->bindParam(3, $_POST["nem"], PDO::PARAM_INT);
             $update_stmt->bindParam(6, $_POST["osztaly_id"], PDO::PARAM_INT);
             $update_stmt->bindParam(7, $profileImageName, PDO::PARAM_STR);
-            $update_stmt->bindParam(8, $_GET['id'], PDO::PARAM_INT);
+            $update_stmt->bindParam(8, $_POST['munkakor'], PDO::PARAM_STR);
+            $update_stmt->bindParam(9, $_GET['id'], PDO::PARAM_INT);
             if ($update_stmt->execute()) {
                 header("Location: employe.php");
             } else {
@@ -80,6 +81,11 @@ if (isset($_GET['id'])) {
                     <label class="form-label" for="fizetes">Fizetés</label>
                     <input type="text" class="form-control" name="fizetes" value="<?= $dolgozo->fizetes ?>"
                            id="fizetes">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="munkakor">Munkakör</label>
+                    <input type="text" class="form-control" name="munkakor" value="<?= $dolgozo->munkakor ?>"
+                           id="munkakor">
                 </div>
                 <div class="mb-3">
                     <Label class="form-label" for="neme">Neme</Label>
