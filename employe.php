@@ -61,7 +61,6 @@ $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                         } else {
                             echo "Nincs megadva osztály";
                         }
-
                         ?>
                     </td>
                     <td class="actions">

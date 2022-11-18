@@ -14,14 +14,15 @@ if (isset($_GET['id'])) {
         if (empty($_POST["veznev"]) && empty($_POST["kernev"]) && empty($_POST['szulido']) && empty($_POST['fizetes']) && empty($_POST['munkakor'])) {
             $msg .= "Minden mező kitöltése kötelező!";
         } else {
-            if (isset($_FILES["profilkep"])) {
+            if (isset($_FILES["profilkep"]) && !empty($_FILES["profilkep"]["name"])) {
                 $profileImageName = time() . '_' . $_FILES["profilkep"]["name"];
                 $target = 'profileimg/' . $profileImageName;
-                if (!move_uploaded_file($_FILES["profilkep"]["tmp_name"], $target)) {
-                    $msg .= "Hiba történt a képfeltöltés során!";
-                    exit;
+                if (move_uploaded_file($_FILES["profilkep"]["tmp_name"], $target)) {
+                    if($dolgozo->profilkep){
+                        unlink("profileimg/" . $dolgozo->profilkep);
+                    }
                 } else {
-                    unlink("profileimg/" . $dolgozo->profilkep);
+                    $msg .= "Hiba történt a képfeltöltés során!";
                 }
             }
             $update_stmt = $pdo->prepare("UPDATE `dolgozo` SET `veznev` = ?, `kernev` = ?, `nem` = ?, `szulido` = ?, `fizetes` = ?, `osztaly_id` = ?, `profilkep` = ?, `munkakor` = ? WHERE `dolgozo`.`id` = ?");
@@ -35,7 +36,7 @@ if (isset($_GET['id'])) {
             $update_stmt->bindParam(8, $_POST['munkakor'], PDO::PARAM_STR);
             $update_stmt->bindParam(9, $_GET['id'], PDO::PARAM_INT);
             if ($update_stmt->execute()) {
-                header("Location: employe.php");
+               header("Location: employe.php");
             } else {
                 $msg = 'Sikertelen létrehozás!';
             }

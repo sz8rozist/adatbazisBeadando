@@ -4,7 +4,7 @@ $pdo = pdo_connect_mysql();
 if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["osztaly_id"])){
     $stmt = $pdo->prepare('DELETE FROM osztaly WHERE id = ?');
     $stmt->execute([$_GET['osztaly_id']]);
-    header("Location: index.php");
+    header("Location: department.php");
 }
 
 if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["dolgozo_id"])){

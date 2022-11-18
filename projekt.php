@@ -3,13 +3,13 @@ include ('functions.php');
 $pdo = pdo_connect_mysql();
 $perPage = 15;
 
-$total_row = $pdo->query('SELECT projekt.*, osztaly.nev FROM projekt, osztaly WHERE projekt.osztaly_id = osztaly.id')->rowCount();
+$total_row = $pdo->query('SELECT projekt.* FROM projekt')->rowCount();
 $pages = ceil($total_row / $perPage);
 
 $page = isset($_GET['page']) ? $_GET["page"] : 1;
 $start = ($page - 1) * $perPage;
 
-$query = "SELECT projekt.*, osztaly.nev as osztaly FROM projekt, osztaly WHERE projekt.osztaly_id = osztaly.id LIMIT $start, $perPage";
+$query = "SELECT projekt.* FROM projekt LIMIT $start, $perPage";
 $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
@@ -42,7 +42,16 @@ $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 <tr data-id="<?=$projekt['id']?>" onclick="selectProjekt(this)">
                     <td><?=$projekt['nev']?></td>
                     <td><?=$projekt['ar']?></td>
-                    <td><?=$projekt['osztaly']?></td>
+                    <td><?php
+                        $stmt = $pdo->prepare("SELECT osztaly.nev FROM osztaly WHERE osztaly.id = ?");
+                        $stmt->execute([$projekt["osztaly_id"]]);
+                        $osztaly = $stmt->fetchColumn();
+                        if ($osztaly) {
+                            echo $osztaly;
+                        } else {
+                            echo "Nincs megadva osztály";
+                        }
+                        ?></td>
                     <td><?=$projekt['aktiv'] == 1 ? '<i style="color: green" class="fas fa-check-circle"></i>'  : '<i style="color: red" class="fas fa-times"></i>'?></td>
                     <td class="actions">
                         <a href="edit_projekt.php?id=<?=$projekt['id']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>
