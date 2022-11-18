@@ -12,10 +12,6 @@ $start = ($page - 1) * $perPage;
 $query = "SELECT dolgozo.* FROM dolgozo LIMIT $start,$perPage";
 $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
-//TODO: Itt lehet ez lesz a jó: SELECT osztaly_id, nev, fizetes FROM dolgozo AS D1 WHERE fizetes = (SELECT MAX(fizetes) FROM dolgozo AS D2 WHERE d1.osztaly_id = D2.osztaly_id)
-$legtobb_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, MAX(dolgozo.fizetes) as max_fizetes, osztaly.nev as osztaly FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id");
-$legtobb_fizetes_query->execute();
-$legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <?= template_header('Dolgozók') ?>
 <div class="container">
@@ -91,31 +87,6 @@ $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
                 </a></li>
         <?php endfor; ?>
     </ul>
-    <?php if (!empty($legtobb_fizetes_result)): ?>
-        <table class="table table-bordered caption-top">
-            <caption>Jól kereső dolgozók</caption>
-            <thead>
-            <tr>
-                <th>Osztály</th>
-                <th>Vezetéknév</th>
-                <th>Keresztnév</th>
-                <th>Fizetés</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($legtobb_fizetes_result as $row): ?>
-                <tr>
-                    <td><?= $row["osztaly"] ?></td>
-                    <td><?= $row["veznev"] ?></td>
-                    <td><?= $row["kernev"] ?></td>
-                    <td><?= $row["max_fizetes"] ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <div class="alert alert-warning">Nem található adat.</div>
-    <?php endif; ?>
 </div>
 
 <?= template_footer() ?>

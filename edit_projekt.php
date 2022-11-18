@@ -30,7 +30,7 @@ if(isset($_GET['id'])){
 }
 ?>
 <?=template_header('Projekt szerkesztés')?>
-<<div class="container">
+<div class="container">
     <div class="row mt-5 mb-3">
         <div class="col-lg-12">
             <h2>Projekt szerkesztése</h2>
