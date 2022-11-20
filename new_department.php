@@ -2,9 +2,7 @@
 include ('functions.php');
 $msg = "";
 $pdo = pdo_connect_mysql();
-$stmt = $pdo->prepare('SELECT * FROM dolgozo');
-$stmt->execute();
-$dolgozok = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 if(!empty($_POST)){
     if(empty($_POST["osztaly_nev"])){

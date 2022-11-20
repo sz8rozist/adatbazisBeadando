@@ -7,8 +7,11 @@ if (!empty($_POST)) {
     if(empty($_POST["nev"]) && empty($_POST["ar"]) && $_POST["osztaly_id"] == 0){
         $msg .= "Minden mező kitöltése kötelező!";
     }else{
-        $stmt = $pdo->prepare('INSERT INTO projekt (nev, ar, osztaly_id, aktiv) VALUES (?, ?, ?, ?)');
-        if ($stmt->execute([$_POST["nev"], $_POST["ar"], $_POST['osztaly_id'], (isset($_POST["aktiv"])) ? "1" : "0"])) {
+        $stmt = $pdo->prepare('INSERT INTO projekt (nev, ar, osztaly_id, aktiv, osztaly_nev) VALUES (?, ?, ?, ?, ?)');
+        $osztaly_nev = $pdo->prepare("SELECT nev FROM osztaly WHERE id = ?");
+        $osztaly_nev->execute([$_POST["osztaly_id"]]);
+        $nev = $osztaly_nev->fetchColumn();
+        if ($stmt->execute([$_POST["nev"], $_POST["ar"], $_POST['osztaly_id'], (isset($_POST["aktiv"])) ? "1" : "0", $nev])) {
             header("Location: projekt.php");
         } else {
             $msg = 'Sikertelen beszúrás!';

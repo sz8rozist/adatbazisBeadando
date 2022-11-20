@@ -2,22 +2,17 @@
 include('functions.php');
 $pdo = pdo_connect_mysql();
 
-$legtobb_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, MAX(dolgozo.fizetes) as max_fizetes, osztaly.nev as osztaly FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id LIMIT 7");
+$legtobb_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, MAX(dolgozo.fizetes) AS max_fizetes, osztaly.nev as osztaly FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id AND dolgozo.fizetes IN (SELECT MAX(dolgozo.fizetes) FROM dolgozo GROUP BY dolgozo.osztaly_id) GROUP BY osztaly.id");
 $legtobb_fizetes_query->execute();
 $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
 
-$atlag_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, FLOOR(AVG(dolgozo.fizetes) + 0.5) as atlag_fizetes, osztaly.nev FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id LIMIT 7");
+$atlag_fizetes_query = $pdo->query("SELECT osztaly.nev AS osztaly, FLOOR(AVG(dolgozo.fizetes) + 0.5) as atlag_fizetes, osztaly.nev FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id");
 $atlag_fizetes_query->execute();
 $atlag_fizetes_result = $atlag_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <?= template_header('Kezdőlap') ?>
 <div class="container">
-    <!--
-    TODO: Első diagram: Osztályonként hányan dolgoznak, Második: Osztályonként a legjobban kereső dolgozók, Harmadik: Osztályonként az átlagfizetés alatt kereső dolgozók, Negyedik: Osztályonként a legfiatalabb dolgozó
-     Nem muszáj mindent diagramba.
-        Osztályok lekérdezése amelyek átlagon alul/felül teljesítettek a projekt.ar és a projekt.active alapján (ha nem aktív a projekt akkor már fizettek érte ergo a projekt.ar már befolyt az osztálynak.
-     -->
     <div class="row mt-5">
         <div class="col-lg-4">
             <div class="card">
@@ -64,22 +59,20 @@ $atlag_fizetes_result = $atlag_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
     <div class="row mt-3">
         <div class="col-lg-8">
                 <div class="card">
-                    <h5 class="card-header">Dolgozók átlagfizetése</h5>
+                    <h5 class="card-header">Osztályok átlagfizetése</h5>
                     <div class="card-body text-center">
                         <?php if (!empty($atlag_fizetes_result)): ?>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>Vezetéknév</th>
-                                    <th>Keresztnév</th>
-                                    <th>Fizetés</th>
+                                    <th>Osztály</th>
+                                    <th>Átlagfizetés</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php foreach ($atlag_fizetes_result as $row): ?>
                                     <tr>
-                                        <td><?= $row["veznev"] ?></td>
-                                        <td><?= $row["kernev"] ?></td>
+                                        <td><?= $row["osztaly"] ?></td>
                                         <td><?= $row["atlag_fizetes"] ?></td>
                                     </tr>
                                 <?php endforeach; ?>

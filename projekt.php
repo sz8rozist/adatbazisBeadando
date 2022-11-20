@@ -1,5 +1,5 @@
 <?php
-include ('functions.php');
+include('functions.php');
 $pdo = pdo_connect_mysql();
 $perPage = 15;
 
@@ -13,7 +13,7 @@ $query = "SELECT projekt.* FROM projekt LIMIT $start, $perPage";
 $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-<?=template_header('Projekt')?>
+<?= template_header('Projekt') ?>
 <div class="container">
     <div class="row mt-5 mb-3">
         <div class="col-lg-12">
@@ -37,11 +37,11 @@ $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         </tr>
         </thead>
         <tbody>
-        <?php if(!empty($projektek)): ?>
+        <?php if (!empty($projektek)): ?>
             <?php foreach ($projektek as $projekt): ?>
-                <tr data-id="<?=$projekt['id']?>" onclick="selectProjekt(this)">
-                    <td><?=$projekt['nev']?></td>
-                    <td><?=$projekt['ar']?></td>
+                <tr data-id="<?= $projekt['id'] ?>" onclick="selectProjekt(this)">
+                    <td><?= $projekt['nev'] ?></td>
+                    <td><?= $projekt['ar'] ?></td>
                     <td><?php
                         $stmt = $pdo->prepare("SELECT osztaly.nev FROM osztaly WHERE osztaly.id = ?");
                         $stmt->execute([$projekt["osztaly_id"]]);
@@ -52,10 +52,18 @@ $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                             echo "Nincs megadva osztály";
                         }
                         ?></td>
-                    <td><?=$projekt['aktiv'] == 1 ? '<i style="color: green" class="fas fa-check-circle"></i>'  : '<i style="color: red" class="fas fa-times"></i>'?></td>
+                    <td><?= $projekt['aktiv'] == 1 ? '<i style="color: green" class="fas fa-check-circle"></i>' : '<i style="color: red" class="fas fa-times"></i>' ?></td>
                     <td class="actions">
-                        <a href="edit_projekt.php?id=<?=$projekt['id']?>" class="edit"><i class="fas fa-pen fa-xs"></i></a>
-                        <a href="delete.php?projekt_id=<?=$projekt['id']?>" class="trash text-danger"><i class="fas fa-trash fa-xs"></i></a>
+                        <a href="edit_projekt.php?id=<?= $projekt['id'] ?>" class="edit"><i
+                                    class="fas fa-pen fa-xs"></i></a>
+                        <a href="delete.php?projekt_id=<?= $projekt['id'] ?>" class="trash text-danger"><i
+                                    class="fas fa-trash fa-xs"></i></a>
+                        <?php $dolgozo_count = $pdo->query('SELECT * FROM dolgozo')->rowCount();
+                        if ($dolgozo_count > 0) {
+                            ?>
+                            <a href="dolgozo_to_projekt.php?projekt_id=<?= $projekt['id'] ?>"
+                               class="trash text-success"><i class="fas fa-user fa-xs"></i></a>
+                        <?php } ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -76,6 +84,6 @@ $projektek = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     </ul>
 </div>
 
-<?=template_footer()?>
+<?= template_footer() ?>
 
 

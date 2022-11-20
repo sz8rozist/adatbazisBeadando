@@ -18,3 +18,10 @@ if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["projekt_id"])){
     $stmt->execute([$_GET['projekt_id']]);
     header("Location: projekt.php");
 }
+
+if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["dolgozik_id"])){
+    $stmt = $pdo->prepare('DELETE FROM dolgozik WHERE id = ?');
+    $stmt->execute([$_GET['dolgozik_id']]);
+    header("Location: projekt.php");
+}
+
