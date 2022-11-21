@@ -23,6 +23,7 @@ $osztalyok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
     <div class="row mb-3">
         <div class="col-lg-12 text-end">
             <a class="btn btn-primary" href="new_department.php">Új osztály</a>
+            <a class="btn btn-primary" target="_self" href="dump.php">Export</a>
         </div>
     </div>
     <table class="table table-bordered">
