@@ -3,8 +3,8 @@ include('functions.php');
 $msg = "";
 $pdo = pdo_connect_mysql();
 if (isset($_GET['id'])) {
-    $stmt = $pdo->prepare('SELECT * FROM dolgozo');
-    $stmt->execute();
+    $stmt = $pdo->prepare('SELECT * FROM dolgozo WHERE osztaly_id = ?');
+    $stmt->execute([$_GET['id']]);
     $dolgozok = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $osztaly_stmt = $pdo->prepare("SELECT osztaly.id, osztaly.nev FROM osztaly WHERE osztaly.id = ?");

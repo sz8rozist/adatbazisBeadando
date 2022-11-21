@@ -1,7 +1,7 @@
 <?php
 include('functions.php');
 $pdo = pdo_connect_mysql();
-$perPage = 15;
+$perPage = 10;
 
 $total_row = $pdo->query('SELECT dolgozo.* FROM dolgozo')->rowCount();
 $pages = ceil($total_row / $perPage);

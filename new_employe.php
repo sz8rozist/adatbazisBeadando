@@ -8,7 +8,7 @@ if (!empty($_POST)) {
     if(empty($_POST["veznev"]) && empty($_POST["kernev"]) && empty($_POST['szulido']) && empty($_POST['fizetes']) && empty($_POST["munkakor"])){
         $msg .= "Minden mező kitöltése kötelező!";
     }else{
-        $stmt = $pdo->prepare('INSERT INTO dolgozo (veznev, kernev, szulido, fizetes, nem, munkakor, osztaly_id) VALUES (?, ?, ?, ?, ?,?, ?)');
+        $stmt = $pdo->prepare('INSERT INTO dolgozo (veznev, kernev, szulido, fizetes, nem, munkakor, osztaly_id) VALUES (?, ?, ?, ?, ?, ?,?)');
         $stmt->bindParam(1, $_POST["veznev"], PDO::PARAM_STR);
         $stmt->bindParam(2, $_POST["kernev"], PDO::PARAM_STR);
         $stmt->bindParam(3, $_POST["szulido"], PDO::PARAM_STR);

@@ -6,7 +6,9 @@ if(isset($_GET["projekt_id"])){
     $stmt->execute([$_GET["projekt_id"]]);
     $projekt = $stmt->fetchObject();
 
-    $dolgozok = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, dolgozik.kezdes_datum, dolgozik.projekt_id as projektid, dolgozik.id as dolgozikid FROM dolgozo, dolgozik WHERE dolgozo.id = dolgozik.dolgozo_id")->fetchAll(PDO::FETCH_ASSOC);
+    $dolgozok_stmt = $pdo->prepare("SELECT dolgozo.veznev, dolgozo.kernev, dolgozik.kezdes_datum, dolgozik.projekt_id as projektid, dolgozik.id as dolgozikid FROM dolgozo, dolgozik WHERE dolgozo.id = dolgozik.dolgozo_id AND dolgozik.projekt_id = ?");
+    $dolgozok_stmt->execute([$_GET["projekt_id"]]);
+    $dolgozok = $dolgozok_stmt->fetchAll(PDO::FETCH_ASSOC);
 }else{
     header("location: projekt.php");
 }

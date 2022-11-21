@@ -26,7 +26,7 @@ if (isset($_GET["id"])) {
     <div class="container">
         <div class="row mt-5 mb-3">
             <div class="col-lg-12">
-                <h2>Dolgozó hozzáadása a projekthez</h2>
+                <h2>Szerkesztés</h2>
                 <hr>
             </div>
         </div>
