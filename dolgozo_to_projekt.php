@@ -2,7 +2,7 @@
 include ('functions.php');
 $pdo = pdo_connect_mysql();
 if(isset($_GET["projekt_id"])){
-    $stmt = $pdo->prepare("SELECT projekt.nev, projekt.id FROM projekt WHERE projekt.id = ?");
+    $stmt = $pdo->prepare("SELECT projekt.nev, projekt.id, projekt.aktiv FROM projekt WHERE projekt.id = ?");
     $stmt->execute([$_GET["projekt_id"]]);
     $projekt = $stmt->fetchObject();
 
@@ -24,7 +24,7 @@ if(isset($_GET["projekt_id"])){
 </div>
 <div class="row mb-3">
     <div class="col-lg-12 text-end">
-        <a class="btn btn-primary" href="new_dolgozo_to_projekt.php?projekt_id=<?=$projekt->id?>">Dolgozó hozzárendelése</a>
+        <a class="btn btn-primary" style="<?=($projekt->aktiv == 0 ? "pointer-events: none; cursor: default; opacity:.65" : "")?>"  href="new_dolgozo_to_projekt.php?projekt_id=<?=$projekt->id?>">Dolgozó hozzárendelése</a>
     </div>
 </div>
 <table id="projekt_table" class="table table-bordered">
