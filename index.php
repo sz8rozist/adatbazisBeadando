@@ -6,7 +6,7 @@ $legtobb_fizetes_query = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, MAX
 $legtobb_fizetes_query->execute();
 $legtobb_fizetes_result = $legtobb_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
 
-$atlag_fizetes_query = $pdo->query("SELECT osztaly.nev AS osztaly, FLOOR(AVG(dolgozo.fizetes) + 0.5) as atlag_fizetes, osztaly.nev FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id");
+$atlag_fizetes_query = $pdo->query("SELECT osztaly.nev AS osztaly , ROUND(AVG(dolgozo.fizetes), 0) AS atlag_fizetes FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id GROUP BY osztaly.id");
 $atlag_fizetes_query->execute();
 $atlag_fizetes_result = $atlag_fizetes_query->fetchAll(PDO::FETCH_ASSOC);
 
