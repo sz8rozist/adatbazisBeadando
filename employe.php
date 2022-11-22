@@ -12,6 +12,8 @@ $start = ($page - 1) * $perPage;
 $query = "SELECT dolgozo.* FROM dolgozo LIMIT $start,$perPage";
 $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
 
+//oszályonként a legidősebb dolgozók
+$legidosebb_dolgozo = $pdo->query("SELECT dolgozo.veznev, dolgozo.kernev, dolgozo.szulido, osztaly.nev AS osztaly FROM dolgozo, osztaly WHERE dolgozo.osztaly_id = osztaly.id AND dolgozo.szulido IN (SELECT MIN(szulido) FROM dolgozo GROUP BY dolgozo.osztaly_id)")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <?= template_header('Dolgozók') ?>
 <div class="container">
@@ -44,7 +46,9 @@ $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
         <?php if (!empty($dolgozok)): ?>
             <?php foreach ($dolgozok as $dolgozo): ?>
                 <tr>
-                    <td><img alt="profile" class="profileimg" src="<?php echo (empty($dolgozo["profilkep"])) ? "./img/profileavatar.webp" : "./profileimg/".$dolgozo["profilkep"]; ?>"></td>
+                    <td><img alt="profile" class="profileimg"
+                             src="<?php echo (empty($dolgozo["profilkep"])) ? "./img/profileavatar.webp" : "./profileimg/" . $dolgozo["profilkep"]; ?>">
+                    </td>
                     <td><?= $dolgozo['veznev'] ?></td>
                     <td><?= $dolgozo['kernev'] ?></td>
                     <td><?= ($dolgozo['nem'] == 0) ? "Nő" : "Férfi" ?></td>
@@ -86,6 +90,31 @@ $dolgozok = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
                 </a></li>
         <?php endfor; ?>
     </ul>
+    <table class="table table-bordered caption-top">
+        <caption>Osztályonkénti legidősebb dolgozó</caption>
+        <thead>
+        <th>Vezetéknév</th>
+        <th>Keresztnév</th>
+        <th>Osztály</th>
+        <th>Születési év</th>
+        </thead>
+        <tbody>
+        <?php if (!empty($legidosebb_dolgozo)): ?>
+            <?php foreach ($legidosebb_dolgozo as $dolgozo): ?>
+                <tr>
+                    <td><?=$dolgozo["veznev"]?></td>
+                    <td><?=$dolgozo["kernev"]?></td>
+                    <td><?=$dolgozo["osztaly"]?></td>
+                    <td><?=$dolgozo["szulido"]?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="9">Nincs rögzítve dolgozó.</td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
 </div>
 
 <?= template_footer() ?>
